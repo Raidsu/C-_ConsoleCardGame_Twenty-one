@@ -11,3 +11,16 @@ S:\Облако\Обучение Разработчик игр\Просто та
 S:\Облако\Обучение Разработчик игр\Просто так\Cards\obj\Debug\netcoreapp3.1\Cards.dll
 S:\Облако\Обучение Разработчик игр\Просто так\Cards\obj\Debug\netcoreapp3.1\Cards.pdb
 S:\Облако\Обучение Разработчик игр\Просто так\Cards\obj\Debug\netcoreapp3.1\Cards.genruntimeconfig.cache
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\obj\Debug\netcoreapp3.1\Cards.csprojAssemblyReference.cache
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\obj\Debug\netcoreapp3.1\Cards.AssemblyInfoInputs.cache
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\obj\Debug\netcoreapp3.1\Cards.AssemblyInfo.cs
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\obj\Debug\netcoreapp3.1\Cards.csproj.CoreCompileInputs.cache
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\obj\Debug\netcoreapp3.1\Cards.dll
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\obj\Debug\netcoreapp3.1\Cards.pdb
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\bin\Debug\netcoreapp3.1\Cards.exe
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\bin\Debug\netcoreapp3.1\Cards.deps.json
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\bin\Debug\netcoreapp3.1\Cards.runtimeconfig.json
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\bin\Debug\netcoreapp3.1\Cards.runtimeconfig.dev.json
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\bin\Debug\netcoreapp3.1\Cards.dll
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\bin\Debug\netcoreapp3.1\Cards.pdb
+F:\REPOS\C#_ConsoleCardGame_Twenty-one\obj\Debug\netcoreapp3.1\Cards.genruntimeconfig.cache

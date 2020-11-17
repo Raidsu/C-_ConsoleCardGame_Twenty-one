@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+
 
 namespace ConsoleCardGameTwentyOne
 {
@@ -77,26 +79,28 @@ namespace ConsoleCardGameTwentyOne
         /*
          * МЕТОД, ВОЗВРАЩАЮЩИЙ КОЛИЧЕСТВО НАБРАННЫХ ОЧКОВ ЗА КАРТУ
          */
-     /*   static ushort getCardValue(ref CardRank rank)
+        static ushort getCardValue(ref CardRank rank)
         {
             switch (rank)
             {
-                case CardRank.two: return 2; break;
-                case CardRank.three: return 3; break;
-                case CardRank.four: return 4; break;
-                case CardRank.five: return 5; break;
-                case CardRank.six: return 6; break;
-                case CardRank.seven: return 7; break;
-                case CardRank.eight: return 8; break;
-                case CardRank.nine: return 9; break;
-                case CardRank.ten: return 10; break;
-                case CardRank.knave: return 2; break;
-                case CardRank.queen: return 3; break;
-                case CardRank.king: return 4; break;
-                case CardRank.ace: return 11; break;
+                case CardRank.two: return 2;
+                case CardRank.three: return 3;
+                case CardRank.four: return 4;
+                case CardRank.five: return 5;
+                case CardRank.six: return 6;
+                case CardRank.seven: return 7;
+                case CardRank.eight: return 8;
+                case CardRank.nine: return 9;
+                case CardRank.ten: return 10;
+                case CardRank.knave: return 2;
+                case CardRank.queen: return 3;
+                case CardRank.king: return 4;
+                case CardRank.ace: return 11;
+                default: throw new ArgumentOutOfRangeException();
+
             }
         }
-     */
+     
 
         /*
          * 
@@ -128,7 +132,7 @@ namespace ConsoleCardGameTwentyOne
             }
 
             /*
-             МЕТОД РАСПЕЧАТЫВАНИЯ КАРТ КОЛОДЫ (ИСПОЛЬЗУЕТСЯ ДЛЯ ОТЛАДКИ)
+             МЕТОД РАСПЕЧАТЫВАНИЯ КАРТ КОЛОДЫ (ИСПОЛЬЗУЕТСЯ ДЛЯ ОТЛАДКИ) ИЛИ ВОЗВРАТА ЗНАЧЕНИЯ КАРТЫ
              */
             public static void printDeck(ref Cards[] cards)
             {
@@ -137,6 +141,11 @@ namespace ConsoleCardGameTwentyOne
                    //вызываем метод печати номинала и масти карты
                     printCardValue(ref cards[i].rank, ref cards[i].suite);
                 }
+            }
+
+            public static ushort printDeck(ref Cards[] cards, ref ushort turn)
+            {
+                return getCardValue(ref cards[turn].rank);
             }
 
 
@@ -173,6 +182,83 @@ namespace ConsoleCardGameTwentyOne
         }
 
 
+        /*
+         ФУНКЦИЯ ОПРЕДЕЛЯЮЩАЯ ТОГО КТО ХОДИТ ПЕРВЫМ
+         */
+
+        static bool isFirst(ref string player1, ref string player2)
+        {
+                        
+            while (true)
+            {
+                Console.WriteLine($"Кто ходит первым? (введите число)\n 1 - {player1}\n2 - {player2}");
+                int num = Convert.ToInt32(Console.ReadLine());
+                if (num == 1) return true;
+                else if (num == 2) return false;
+                else
+                {
+                    Console.WriteLine("Ошибка! Введите 1 или 2");
+                    Thread.Sleep(1500);
+                    Console.Clear();
+                }
+            }
+        }
+
+        /*
+                 ФУНКЦИЯ ОПРЕДЕЛЯЮЩАЯ ХОЧЕТ ЛИ ИГРОК ВЗЯТЬ ЕЩЕ КАРТУ
+        */
+
+        static bool getAnswer(ref string player, ref ushort plcount, ref string opponent, ref ushort opcount)
+        {
+            
+            
+            while (true)
+            {
+                Console.WriteLine($"{player} - у вас {plcount} очков, у игрока {opponent} - {opcount} очков.");
+                Console.WriteLine($"{player}, хотите взять еще карту?(введите число)\n 1 - Да\n2 - Нет");
+                int num = Convert.ToInt32(Console.ReadLine());
+                if (num == 1) return true;
+                else if (num == 2) return false;
+                else
+                {
+                    Console.WriteLine("Ошибка! Введите 1 или 2");
+                    Thread.Sleep(1500);
+                    Console.Clear();
+                }
+            }
+        }
+
+
+        /*
+         МЕТОД ДОБОРА ИГРАЮЩИХ КАРТ
+         */
+        static void inGame(ref string player, ref ushort plcount, ref string opponent, ref ushort opcount, ref Cards[] cards, ref ushort turn)
+        {
+            bool agree = true; //хочет ли игрок взять еще одну карту
+            while (true)
+            {
+                agree = getAnswer(ref player, ref plcount, ref opponent, ref opcount);
+                if (agree == true)
+                {
+                    plcount += Cards.printDeck(ref cards, ref turn);
+                    turn++;
+                    Console.Clear();
+
+                    if (plcount > 21)
+                    {
+
+                        Console.WriteLine($"{player}, вы проиграли со счетом {plcount}\nПобедитель - {opponent}!");
+                        System.Environment.Exit(0);
+                    }
+                    
+                }
+                else
+                {
+                    Console.Clear();
+                    break;
+                }
+            }
+        }
 
 
         /*
@@ -191,20 +277,62 @@ namespace ConsoleCardGameTwentyOne
             //перетасовываем карты (метод из структуры Cards)
             Cards.shufleDeck(ref cards);
 
-//распечатываем колоду (для отладки, закомментировать после проверки) (метод из структуры Cards)
-//Cards.printDeck(ref cards);
+            //распечатываем колоду (для отладки, закомментировать после проверки) (метод из структуры Cards)
+            //Cards.printDeck(ref cards);
 
-            
+
             //Игра в "Бдэкджек" или "Очко" на 2 игроков
 
-
-          
+            Console.WriteLine("Вас приветствует консольная игра (по упрощенным правилам) \"Очко\"\nДавайте знакомиться\nИгрок №1 введите имя:");
+            string player1 = Console.ReadLine();
+            Console.WriteLine("Игрок №2 введите имя:");
+            string player2 = Console.ReadLine();
+            Console.Clear();
+            
+            ushort pl1count = 0; //переменная подсчета очков игрока 1
+            ushort pl2count = 0; //переменная подсчета очков игрока 2
+            ushort turn = 0;     //переключение по элементам массива карт
+            bool players=true; //переключатель игроков true - игрок 1, false - игрок 2
             
 
 
+            //кто ходит первым
+            players = isFirst(ref player1, ref player2);
 
-
+            //меняем игроков местами если первым будет ходить изначальный "игрок 2"
+            if (players==false)
+            {
+                string temp;
+                temp = player1;
+                player1 = player2;
+                player2 = temp;
+            }
             
+            //игроки получают стартовые карты
+            pl1count = Cards.printDeck(ref cards, ref turn); //перегруженый метод (печатает колоду или возвращает значение номинала карты)
+            turn++;
+            pl2count = Cards.printDeck(ref cards, ref turn);
+            turn++;
+            Console.Clear();
+            Console.WriteLine($"Начальные карты розданы.");
+
+            //играет 1 игрок
+            inGame(ref player1, ref pl1count, ref player2, ref pl2count, ref cards, ref turn);
+            //играет 2 игрок
+            inGame(ref player2, ref pl2count, ref player1, ref pl1count, ref cards, ref turn);
+
+            if (pl1count > pl2count) Console.WriteLine($"Со счетом {pl1count} - {pl2count} побеждает {player1}");
+            else Console.WriteLine($"Со счетом {pl2count} - {pl1count} побеждает {player2}");
+
+
+
+
+
+
+
+
+
+
 
         }
     }
