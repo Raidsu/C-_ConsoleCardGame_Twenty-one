@@ -16,3 +16,8 @@ v0.1:
 	2. Getting the player's response method
 	3. Finishing the playing card method
 	4. The main function of the game Twenty-One
+
+v0.1.1:
+	Added:
+	1. Displaying the taken card method
+	

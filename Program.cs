@@ -131,21 +131,18 @@ namespace ConsoleCardGameTwentyOne
 
             }
 
-            /*
-             МЕТОД РАСПЕЧАТЫВАНИЯ КАРТ КОЛОДЫ (ИСПОЛЬЗУЕТСЯ ДЛЯ ОТЛАДКИ) ИЛИ ВОЗВРАТА ЗНАЧЕНИЯ КАРТЫ
-             */
-            public static void printDeck(ref Cards[] cards)
+            //МЕТОД ВОЗВРАЩАЮЩИЙ ЗНАЧЕНИЕ КАРТЫ
+            public static ushort getCard(ref Cards[] cards, ref ushort turn)
             {
-                for (ushort i = 0; i < cards.Length; i++)
-                {
-                   //вызываем метод печати номинала и масти карты
-                    printCardValue(ref cards[i].rank, ref cards[i].suite);
-                }
+                   
+                return getCardValue(ref cards[turn].rank);
             }
 
-            public static ushort printDeck(ref Cards[] cards, ref ushort turn)
+            //МЕТОД ВЫВОДЯЩИЙ НА ЭКРАН ЗНАЧЕНИЕ КАРТЫ
+            public static void printCard(ref Cards[] cards, ref ushort turn)
             {
-                return getCardValue(ref cards[turn].rank);
+                Console.Write("Вам выпала карта: ");
+                printCardValue(ref cards[turn].rank, ref cards[turn].suite);
             }
 
 
@@ -214,6 +211,7 @@ namespace ConsoleCardGameTwentyOne
             
             while (true)
             {
+
                 Console.WriteLine($"{player} - у вас {plcount} очков, у игрока {opponent} - {opcount} очков.");
                 Console.WriteLine($"{player}, хотите взять еще карту?(введите число)\n 1 - Да\n2 - Нет");
                 int num = Convert.ToInt32(Console.ReadLine());
@@ -240,9 +238,13 @@ namespace ConsoleCardGameTwentyOne
                 agree = getAnswer(ref player, ref plcount, ref opponent, ref opcount);
                 if (agree == true)
                 {
-                    plcount += Cards.printDeck(ref cards, ref turn);
-                    turn++;
                     Console.Clear();
+                    plcount += Cards.getCard(ref cards, ref turn);
+
+                    Cards.printCard(ref cards, ref turn);
+
+                    turn++;
+                    
 
                     if (plcount > 21)
                     {
@@ -309,9 +311,9 @@ namespace ConsoleCardGameTwentyOne
             }
             
             //игроки получают стартовые карты
-            pl1count = Cards.printDeck(ref cards, ref turn); //перегруженый метод (печатает колоду или возвращает значение номинала карты)
+            pl1count = Cards.getCard(ref cards, ref turn); //перегруженый метод (печатает колоду или возвращает значение номинала карты)
             turn++;
-            pl2count = Cards.printDeck(ref cards, ref turn);
+            pl2count = Cards.getCard(ref cards, ref turn);
             turn++;
             Console.Clear();
             Console.WriteLine($"Начальные карты розданы.");
