@@ -225,12 +225,29 @@ namespace ConsoleCardGameTwentyOne
                 }
             }
         }
+        static bool getAnswer()
+        {
+            while (true)
+            {
+
+                Console.WriteLine($"1 - Да\n2 - Нет");
+                int num = Convert.ToInt32(Console.ReadLine());
+                if (num == 1) return true;
+                else if (num == 2) return false;
+                else
+                {
+                    Console.WriteLine("Ошибка! Введите 1 или 2");
+                    Thread.Sleep(1500);
+                    Console.Clear();
+                }
+            }
+        }
 
 
-        /*
-         МЕТОД ДОБОРА ИГРАЮЩИХ КАРТ
-         */
-        static void inGame(ref string player, ref ushort plcount, ref string opponent, ref ushort opcount, ref Cards[] cards, ref ushort turn)
+            /*
+             МЕТОД ДОБОРА ИГРАЮЩИХ КАРТ
+             */
+            static void inGame(ref string player, ref ushort plcount, ref string opponent, ref ushort opcount, ref Cards[] cards, ref ushort turn)
         {
             bool agree = true; //хочет ли игрок взять еще одну карту
             while (true)
@@ -250,7 +267,7 @@ namespace ConsoleCardGameTwentyOne
                     {
 
                         Console.WriteLine($"{player}, вы проиграли со счетом {plcount}\nПобедитель - {opponent}!");
-                        System.Environment.Exit(0);
+                        break;
                     }
                     
                 }
@@ -262,6 +279,50 @@ namespace ConsoleCardGameTwentyOne
             }
         }
 
+
+        /*
+         МЕТОД ИГРЫ В 21
+         */
+        static void gameTwentyOne (ref string player1, ref string player2, ref ushort pl1count, ref ushort pl2count, ref ushort turn, ref bool players, ref Cards[] cards)
+        {
+            //перетасовываем карты (метод из структуры Cards)
+            Cards.shufleDeck(ref cards);
+
+            //кто ходит первым
+            players = isFirst(ref player1, ref player2);
+
+                //меняем игроков местами если первым будет ходить изначальный "игрок 2"
+                if (players == false)
+                {
+                    string temp;
+                    temp = player1;
+                    player1 = player2;
+                    player2 = temp;
+                }
+
+                //игроки получают стартовые карты
+                pl1count = Cards.getCard(ref cards, ref turn); //перегруженый метод (печатает колоду или возвращает значение номинала карты)
+                turn++;
+                pl2count = Cards.getCard(ref cards, ref turn);
+                turn++;
+                Console.Clear();
+                Console.WriteLine($"Начальные карты розданы.");
+
+                //играет 1 игрок
+                inGame(ref player1, ref pl1count, ref player2, ref pl2count, ref cards, ref turn);
+            if (pl1count < 21)
+            {
+                //играет 2 игрок
+                inGame(ref player2, ref pl2count, ref player1, ref pl1count, ref cards, ref turn);
+                
+                if (pl1count > pl2count) Console.WriteLine($"Со счетом {pl1count} - {pl2count} побеждает {player1}");
+                else Console.WriteLine($"Со счетом {pl2count} - {pl1count} побеждает {player2}");
+            }
+
+                
+            
+           
+        }
 
         /*
          * 
@@ -276,11 +337,10 @@ namespace ConsoleCardGameTwentyOne
             //инициализируем колоду (метод из структуры Cards)
             Cards.setCardsDeck(ref cards);
 
-            //перетасовываем карты (метод из структуры Cards)
-            Cards.shufleDeck(ref cards);
+            
 
-            //распечатываем колоду (для отладки, закомментировать после проверки) (метод из структуры Cards)
-            //Cards.printDeck(ref cards);
+//распечатываем колоду (для отладки, закомментировать после проверки) (метод из структуры Cards)
+//Cards.printDeck(ref cards);
 
 
             //Игра в "Бдэкджек" или "Очко" на 2 игроков
@@ -295,36 +355,19 @@ namespace ConsoleCardGameTwentyOne
             ushort pl2count = 0; //переменная подсчета очков игрока 2
             ushort turn = 0;     //переключение по элементам массива карт
             bool players=true; //переключатель игроков true - игрок 1, false - игрок 2
-            
+            bool again = true; //играем ли еще раз?
 
-
-            //кто ходит первым
-            players = isFirst(ref player1, ref player2);
-
-            //меняем игроков местами если первым будет ходить изначальный "игрок 2"
-            if (players==false)
+            while (again == true)
             {
-                string temp;
-                temp = player1;
-                player1 = player2;
-                player2 = temp;
+                gameTwentyOne(ref player1, ref player2, ref pl1count, ref pl2count, ref turn, ref players, ref cards);
+                Thread.Sleep(3000);
+                Console.Clear();
+                Console.WriteLine("Сыграем еще?");
+                again = getAnswer();
+                Console.Clear();
+
             }
             
-            //игроки получают стартовые карты
-            pl1count = Cards.getCard(ref cards, ref turn); //перегруженый метод (печатает колоду или возвращает значение номинала карты)
-            turn++;
-            pl2count = Cards.getCard(ref cards, ref turn);
-            turn++;
-            Console.Clear();
-            Console.WriteLine($"Начальные карты розданы.");
-
-            //играет 1 игрок
-            inGame(ref player1, ref pl1count, ref player2, ref pl2count, ref cards, ref turn);
-            //играет 2 игрок
-            inGame(ref player2, ref pl2count, ref player1, ref pl1count, ref cards, ref turn);
-
-            if (pl1count > pl2count) Console.WriteLine($"Со счетом {pl1count} - {pl2count} побеждает {player1}");
-            else Console.WriteLine($"Со счетом {pl2count} - {pl1count} побеждает {player2}");
 
 
 
