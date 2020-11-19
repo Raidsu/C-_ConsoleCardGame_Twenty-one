@@ -316,6 +316,7 @@ namespace ConsoleCardGameTwentyOne
                 inGame(ref player2, ref pl2count, ref player1, ref pl1count, ref cards, ref turn);
                 
                 if (pl1count > pl2count) Console.WriteLine($"Со счетом {pl1count} - {pl2count} побеждает {player1}");
+                else if (pl1count > pl2count) Console.WriteLine($"НИЧЬЯ! Со счетом {pl1count} - {pl2count}");
                 else Console.WriteLine($"Со счетом {pl2count} - {pl1count} побеждает {player2}");
             }
 
